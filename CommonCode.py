@@ -16,28 +16,35 @@ from sklearn.model_selection import train_test_split
 '''
 基本的な流れ
 - データの概要を観察
-- 利用する変数を決める?
-- 学習用データから検証用データを作成する
-- 
+- 利用する変数を決める
+- 変数の前処理を行う
+- 訓練データから、x_trainとy_trainを分ける
+- 予測器の学習を行う:model
+- 学習したmodelを利用しtestデータから予測値を算出
 
-予測に関して
-- 予測器の学習を行う
-- 
+基本的な流れでは未知の値を算出したに過ぎないので、自前でのモデル評価を行い改善策を練る
 
-ハイパーパラメータ―のチューニング
-- paramsについて
-- 
-
+モデルの評価は訓練データを用いて行う
 クロスバリデーション
 - foldのスコア
     - accuracy
     - logloss
         - 低いほど良い指標
+
+モデルのチューニングを行っていく
+ハイパーパラメータ―のチューニング
+- 学習前に指定する
+- 学習の方法や速度、どれだけ複雑にするかなどを定める
+- ベストパラメーターで再度学習してみる
+
+アンサンブル
+- 複数モデルを組み合わせてスコアを向上させる
+
 '''
 
 
 # 訓練データの読み込み
-train = pd.read()
+train = pd.read_csv()
 # 訓練データから目的変数を抜いたテーブル
 # x_trainを作成する
 x_train = train.drop(['目的変数'],axis = 1)
@@ -46,7 +53,7 @@ x_train = train.drop(['目的変数'],axis = 1)
 y_train = train['目的変数']
 
 # テストデータの読み込み
-test = pd.read()
+test = pd.read_csv()
 # この結果が提出する答えとなる
 x_test = test.copy()
 
@@ -103,7 +110,7 @@ logloss = np.mean(scores_logloss)
 accuracy = np.mean(scores_accuracy)
 print(f'logloss: {logloss:.4f}, accuracy: {accuracy:.4f}')
 
-# 基本形
+# モデルの作成
 # trainとsplitで分けたのちに行っていく行動
 # 予測器の学習から予測まで:not cross validation
 lgb_train = lgb.Dataset(X_train, y_train)
